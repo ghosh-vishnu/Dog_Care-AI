@@ -10,7 +10,10 @@ from pathlib import Path
 from decouple import config, Csv
 
 # Build paths inside the project like this: BASE_DIR / 'subdir'.
+# BASE_DIR points to project root (Dog_AI/)
 BASE_DIR = Path(__file__).resolve().parent.parent.parent.parent
+# BACKEND_DIR points to backend/ directory
+BACKEND_DIR = BASE_DIR / 'backend'
 
 # SECURITY WARNING: keep the secret key used in production secret!
 SECRET_KEY = config('SECRET_KEY', default='django-insecure-change-this-in-production')
@@ -126,14 +129,14 @@ USE_TZ = True
 # Static files (CSS, JavaScript, Images)
 # https://docs.djangoproject.com/en/4.2/howto/static-files/
 STATIC_URL = 'static/'
-STATIC_ROOT = BASE_DIR / 'backend' / 'staticfiles'
+STATIC_ROOT = BACKEND_DIR / 'staticfiles'
 STATICFILES_DIRS = [
-    BASE_DIR / 'backend' / 'static',
+    BACKEND_DIR / 'static',
 ]
 
 # Media files
 MEDIA_URL = 'media/'
-MEDIA_ROOT = BASE_DIR / 'backend' / 'media'
+MEDIA_ROOT = BACKEND_DIR / 'media'
 
 # Default primary key field type
 # https://docs.djangoproject.com/en/4.2/ref/settings/#default-auto-field
@@ -241,7 +244,7 @@ LOGGING = {
         },
         'file': {
             'class': 'logging.FileHandler',
-            'filename': BASE_DIR / 'backend' / 'logs' / 'django.log',
+            'filename': BACKEND_DIR / 'logs' / 'django.log',
             'formatter': 'verbose',
         },
     },

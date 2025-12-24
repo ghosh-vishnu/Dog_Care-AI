@@ -5,9 +5,19 @@
 ```
 Dog_AI/
 ├── backend/          # Django Backend
+│   ├── .env         # ⚠️ Environment variables (create this file)
+│   └── ...
 ├── frontend/          # React Frontend
+│   └── ...
 └── README.md         # Main documentation
 ```
+
+## ⚠️ Important: .env File Location
+
+**`.env` file should be in `backend/` directory, NOT in root!**
+
+- ✅ Correct: `backend/.env`
+- ❌ Wrong: `.env` (in root)
 
 ## Backend Setup (Django)
 
@@ -48,7 +58,17 @@ pip install -r requirements.txt
 
 ### Step 5: Create .env File
 
-Create `.env` file in `backend/` directory:
+**⚠️ IMPORTANT: Create `.env` file in `backend/` directory (not in root!)**
+
+```bash
+# Option 1: Copy from example
+cp .env.example .env
+
+# Option 2: Create manually
+# Create backend/.env file with following content:
+```
+
+**Content for `backend/.env`:**
 
 ```env
 SECRET_KEY=your-secret-key-here-change-in-production
@@ -79,6 +99,8 @@ python manage.py runserver
 ```
 
 Backend will run at: **http://127.0.0.1:8000/**
+
+**Note:** Always run Django commands from `backend/` directory!
 
 ---
 
@@ -116,7 +138,7 @@ Frontend will run at: **http://localhost:5173/**
 
 ## Quick Commands
 
-### Backend Commands
+### Backend Commands (Run from `backend/` directory)
 
 ```bash
 cd backend
@@ -127,7 +149,7 @@ python manage.py createsuperuser    # Create admin
 python manage.py check              # Check for errors
 ```
 
-### Frontend Commands
+### Frontend Commands (Run from `frontend/` directory)
 
 ```bash
 cd frontend
@@ -151,8 +173,9 @@ npm run preview  # Preview build
 ### Backend Issues
 
 1. **Module not found:** Make sure virtual environment is activated
-2. **Database error:** Check PostgreSQL is running and .env is correct
+2. **Database error:** Check PostgreSQL is running and `.env` is in `backend/` directory
 3. **Port already in use:** Change port with `python manage.py runserver 8001`
+4. **.env not found:** Make sure `.env` file is in `backend/` directory, not root!
 
 ### Frontend Issues
 
@@ -162,9 +185,20 @@ npm run preview  # Preview build
 
 ---
 
+## File Locations Summary
+
+| File | Location |
+|------|----------|
+| `.env` (Backend) | `backend/.env` ✅ |
+| `.env` (Frontend) | `frontend/.env` (optional) |
+| `manage.py` | `backend/manage.py` |
+| `requirements.txt` | `backend/requirements.txt` |
+| `package.json` | `frontend/package.json` |
+
+---
+
 ## Next Steps
 
 1. Read [API_ENDPOINTS.md](./API_ENDPOINTS.md) for API documentation
 2. Read [API_RESPONSE_STANDARD.md](./API_RESPONSE_STANDARD.md) for response format
 3. Check [PHASE1_AUDIT_REPORT.md](./PHASE1_AUDIT_REPORT.md) for features
-

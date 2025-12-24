@@ -18,6 +18,7 @@ backend/
 ├── utils/             # Utility modules (responses, exceptions)
 ├── manage.py          # Django management script
 ├── requirements.txt   # Python dependencies
+├── .env              # Environment variables (create from .env.example)
 └── README.md         # This file
 ```
 
@@ -49,7 +50,14 @@ pip install -r requirements.txt
 
 ### 4. Environment Configuration
 
-Create a `.env` file in the `backend/` directory:
+**Important:** Create a `.env` file in the `backend/` directory (not in root):
+
+```bash
+# Copy example file
+cp .env.example .env
+```
+
+Or create `.env` manually in `backend/` directory:
 
 ```env
 SECRET_KEY=your-secret-key-here
@@ -60,6 +68,8 @@ DB_PASSWORD=your-password
 DB_HOST=localhost
 DB_PORT=5432
 ```
+
+**Note:** `.env` file should be in `backend/` directory, not in root!
 
 ### 5. Database Setup
 
@@ -109,3 +119,8 @@ Access Django Admin at: `http://127.0.0.1:8000/admin/`
 - PostgreSQL
 - JWT Authentication
 
+## Important Notes
+
+- **`.env` file location:** Must be in `backend/` directory
+- **Working directory:** Run all Django commands from `backend/` directory
+- **Virtual environment:** Can be in root or backend/ (your choice)
