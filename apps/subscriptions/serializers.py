@@ -294,3 +294,4 @@ class UserSubscriptionDetailSerializer(serializers.ModelSerializer):
             return (obj.end_date - today).days
         return 0
 
+
