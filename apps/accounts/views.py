@@ -19,6 +19,12 @@ from .serializers import (
     UserProfileUpdateSerializer,
 )
 from .permissions import IsAdmin, IsUserSelfOrAdmin
+from utils.responses import (
+    success_response,
+    error_response,
+    not_found_response,
+)
+from utils.exceptions import BadRequestException
 
 
 class UserViewSet(viewsets.ModelViewSet):
@@ -75,16 +81,16 @@ class UserViewSet(viewsets.ModelViewSet):
 
         refresh = RefreshToken.for_user(user)
         
-        return Response(
-            {
-                'message': _('User registered successfully.'),
+        return success_response(
+            data={
                 'user': UserDataSerializer(user).data,
                 'tokens': {
                     'refresh': str(refresh),
                     'access': str(refresh.access_token),
                 }
             },
-            status=status.HTTP_201_CREATED
+            message=_('User registered successfully.'),
+            status_code=status.HTTP_201_CREATED
         )
 
     @action(detail=False, methods=['get', 'put', 'patch'], permission_classes=[IsAuthenticated])
@@ -96,7 +102,10 @@ class UserViewSet(viewsets.ModelViewSet):
         
         if request.method == 'GET':
             serializer = UserDataSerializer(user)
-            return Response(serializer.data, status=status.HTTP_200_OK)
+            return success_response(
+                data=serializer.data,
+                message=_('User profile retrieved successfully.')
+            )
         
         elif request.method in ['PUT', 'PATCH']:
             serializer = UserUpdateSerializer(
@@ -107,12 +116,9 @@ class UserViewSet(viewsets.ModelViewSet):
             serializer.is_valid(raise_exception=True)
             serializer.save()
             
-            return Response(
-                {
-                    'message': _('Profile updated successfully.'),
-                    'user': UserDataSerializer(user).data
-                },
-                status=status.HTTP_200_OK
+            return success_response(
+                data={'user': UserDataSerializer(user).data},
+                message=_('Profile updated successfully.')
             )
 
     @action(
@@ -132,9 +138,8 @@ class UserViewSet(viewsets.ModelViewSet):
         serializer.is_valid(raise_exception=True)
         serializer.save()
         
-        return Response(
-            {'message': _('Password changed successfully.')},
-            status=status.HTTP_200_OK
+        return success_response(
+            message=_('Password changed successfully.')
         )
 
     def destroy(self, request, *args, **kwargs):
@@ -144,17 +149,17 @@ class UserViewSet(viewsets.ModelViewSet):
         user = self.get_object()
         
         if user == request.user:
-            return Response(
-                {'error': _('You cannot delete your own account.')},
-                status=status.HTTP_400_BAD_REQUEST
+            return error_response(
+                message=_('You cannot delete your own account.'),
+                status_code=status.HTTP_400_BAD_REQUEST,
+                error_code='CANNOT_DELETE_OWN_ACCOUNT'
             )
         
         user.is_active = False
         user.save()
         
-        return Response(
-            {'message': _('User deactivated successfully.')},
-            status=status.HTTP_200_OK
+        return success_response(
+            message=_('User deactivated successfully.')
         )
 
 
@@ -175,16 +180,15 @@ class UserLoginView(generics.GenericAPIView):
         user = serializer.validated_data['user']
         refresh = RefreshToken.for_user(user)
         
-        return Response(
-            {
-                'message': _('Login successful.'),
+        return success_response(
+            data={
                 'user': UserDataSerializer(user).data,
                 'tokens': {
                     'refresh': str(refresh),
                     'access': str(refresh.access_token),
                 }
             },
-            status=status.HTTP_200_OK
+            message=_('Login successful.')
         )
 
 
@@ -232,7 +236,10 @@ class UserProfileViewSet(viewsets.ViewSet):
             )
         
         serializer = UserProfileSerializer(profile)
-        return Response(serializer.data, status=status.HTTP_200_OK)
+        return success_response(
+            data=serializer.data,
+            message=_('Profile retrieved successfully.')
+        )
 
     @transaction.atomic
     def update(self, request, pk=None):
@@ -257,12 +264,9 @@ class UserProfileViewSet(viewsets.ViewSet):
         serializer.save()
         
         response_serializer = UserProfileSerializer(profile)
-        return Response(
-            {
-                'message': _('Profile updated successfully.'),
-                'profile': response_serializer.data
-            },
-            status=status.HTTP_200_OK
+        return success_response(
+            data={'profile': response_serializer.data},
+            message=_('Profile updated successfully.')
         )
 
     @action(detail=False, methods=['get', 'put', 'patch'], permission_classes=[IsAuthenticated])
@@ -276,7 +280,10 @@ class UserProfileViewSet(viewsets.ViewSet):
         
         if request.method == 'GET':
             serializer = UserProfileSerializer(profile)
-            return Response(serializer.data, status=status.HTTP_200_OK)
+            return success_response(
+                data=serializer.data,
+                message=_('Profile retrieved successfully.')
+            )
         
         elif request.method in ['PUT', 'PATCH']:
             serializer = UserProfileUpdateSerializer(
@@ -288,10 +295,7 @@ class UserProfileViewSet(viewsets.ViewSet):
             serializer.save()
             
             response_serializer = UserProfileSerializer(profile)
-            return Response(
-                {
-                    'message': _('Profile updated successfully.'),
-                    'profile': response_serializer.data
-                },
-                status=status.HTTP_200_OK
+            return success_response(
+                data={'profile': response_serializer.data},
+                message=_('Profile updated successfully.')
             )

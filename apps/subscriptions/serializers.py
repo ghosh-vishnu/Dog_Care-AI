@@ -169,7 +169,7 @@ class UserSubscriptionSerializer(serializers.ModelSerializer):
 
     def validate(self, attrs):
         """
-        Cross-field validation.
+        Cross-field validation and duplicate prevention.
         """
         start_date = attrs.get('start_date') or (
             self.instance.start_date if self.instance else None
@@ -179,6 +179,9 @@ class UserSubscriptionSerializer(serializers.ModelSerializer):
         )
         plan = attrs.get('plan') or (
             self.instance.plan if self.instance else None
+        )
+        user = attrs.get('user') or (
+            self.instance.user if self.instance else None
         )
 
         if start_date and end_date:
@@ -192,6 +195,28 @@ class UserSubscriptionSerializer(serializers.ModelSerializer):
             expected_end_date = start_date + timedelta(days=plan.duration_days)
             if end_date and end_date != expected_end_date:
                 pass
+
+        # Prevent multiple active subscriptions for the same user
+        if user and start_date and end_date:
+            today = timezone.now().date()
+            overlapping_subscriptions = UserSubscription.objects.filter(
+                user=user,
+                status__in=['active'],
+                is_active=True
+            ).exclude(
+                end_date__lt=start_date
+            ).exclude(
+                start_date__gt=end_date
+            )
+            
+            # Exclude current instance if updating
+            if self.instance:
+                overlapping_subscriptions = overlapping_subscriptions.exclude(pk=self.instance.pk)
+            
+            if overlapping_subscriptions.exists():
+                raise serializers.ValidationError({
+                    'user': 'User already has an active subscription for this period. Please cancel the existing subscription first.'
+                })
 
         return attrs
 

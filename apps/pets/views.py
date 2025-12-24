@@ -12,6 +12,11 @@ from .serializers import (
     PetDetailSerializer,
 )
 from apps.accounts.permissions import IsAdmin, IsOwnerOrAdmin
+from utils.responses import (
+    success_response,
+    error_response,
+)
+from utils.exceptions import BadRequestException
 
 
 class PetViewSet(viewsets.ModelViewSet):
@@ -59,12 +64,10 @@ class PetViewSet(viewsets.ModelViewSet):
         pet = serializer.save(owner=request.user)
         
         response_serializer = PetDetailSerializer(pet)
-        return Response(
-            {
-                'message': _('Pet created successfully.'),
-                'pet': response_serializer.data
-            },
-            status=status.HTTP_201_CREATED
+        return success_response(
+            data={'pet': response_serializer.data},
+            message=_('Pet created successfully.'),
+            status_code=status.HTTP_201_CREATED
         )
 
     def retrieve(self, request, *args, **kwargs):
@@ -76,7 +79,10 @@ class PetViewSet(viewsets.ModelViewSet):
         self.check_object_permissions(request, pet)
         
         serializer = self.get_serializer(pet)
-        return Response(serializer.data, status=status.HTTP_200_OK)
+        return success_response(
+            data=serializer.data,
+            message=_('Pet retrieved successfully.')
+        )
 
     @transaction.atomic
     def update(self, request, *args, **kwargs):
@@ -92,12 +98,9 @@ class PetViewSet(viewsets.ModelViewSet):
         serializer.save()
         
         response_serializer = PetDetailSerializer(pet)
-        return Response(
-            {
-                'message': _('Pet updated successfully.'),
-                'pet': response_serializer.data
-            },
-            status=status.HTTP_200_OK
+        return success_response(
+            data={'pet': response_serializer.data},
+            message=_('Pet updated successfully.')
         )
 
     @transaction.atomic
@@ -114,12 +117,9 @@ class PetViewSet(viewsets.ModelViewSet):
         serializer.save()
         
         response_serializer = PetDetailSerializer(pet)
-        return Response(
-            {
-                'message': _('Pet updated successfully.'),
-                'pet': response_serializer.data
-            },
-            status=status.HTTP_200_OK
+        return success_response(
+            data={'pet': response_serializer.data},
+            message=_('Pet updated successfully.')
         )
 
     @transaction.atomic
@@ -133,9 +133,8 @@ class PetViewSet(viewsets.ModelViewSet):
         
         pet.delete()
         
-        return Response(
-            {'message': _('Pet deleted successfully.')},
-            status=status.HTTP_200_OK
+        return success_response(
+            message=_('Pet deleted successfully.')
         )
 
     @action(detail=False, methods=['get'], permission_classes=[IsAuthenticated])
@@ -151,7 +150,10 @@ class PetViewSet(viewsets.ModelViewSet):
             return self.get_paginated_response(serializer.data)
         
         serializer = PetListSerializer(pets, many=True)
-        return Response(serializer.data, status=status.HTTP_200_OK)
+        return success_response(
+            data=serializer.data,
+            message=_('Pets retrieved successfully.')
+        )
 
     @action(
         detail=True,
@@ -167,9 +169,10 @@ class PetViewSet(viewsets.ModelViewSet):
         pet = get_object_or_404(Pet.all_objects, pk=pk)
         
         if not pet.is_deleted:
-            return Response(
-                {'detail': _('Pet is not deleted.')},
-                status=status.HTTP_400_BAD_REQUEST
+            return error_response(
+                message=_('Pet is not deleted.'),
+                status_code=status.HTTP_400_BAD_REQUEST,
+                error_code='PET_NOT_DELETED'
             )
         
         self.check_object_permissions(request, pet)
@@ -177,10 +180,7 @@ class PetViewSet(viewsets.ModelViewSet):
         pet.restore()
         
         serializer = PetDetailSerializer(pet)
-        return Response(
-            {
-                'message': _('Pet restored successfully.'),
-                'pet': serializer.data
-            },
-            status=status.HTTP_200_OK
+        return success_response(
+            data={'pet': serializer.data},
+            message=_('Pet restored successfully.')
         )
