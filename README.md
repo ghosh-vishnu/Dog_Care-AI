@@ -1,223 +1,140 @@
-# Pet Health Backend
+# Pet Health Mobile Application
 
-Production-ready Django + Django REST Framework backend for Pet Health Mobile Application.
+Complete full-stack application for managing pet health records, vaccinations, appointments, and subscriptions.
 
 ## Project Structure
 
 ```
 Dog_AI/
-├── config/                 # Main project configuration
-│   ├── settings/          # Environment-based settings
-│   │   ├── base.py        # Base settings (common across all environments)
-│   │   └── local.py       # Local development settings
-│   ├── urls.py            # Main URL configuration
-│   ├── wsgi.py            # WSGI configuration
-│   └── asgi.py            # ASGI configuration
-├── apps/                   # Django applications
-│   ├── accounts/          # User accounts and authentication
-│   ├── pets/              # Pet management
-│   ├── health/            # Health records, vaccinations, medications
-│   ├── appointments/      # Appointment scheduling
-│   └── notifications/     # User notifications
-├── static/                # Static files
-├── media/                 # Media files (user uploads)
-├── logs/                  # Application logs
-├── templates/             # Django templates
-├── manage.py              # Django management script
-├── requirements.txt      # Python dependencies
-├── env.example           # Environment variables template
-└── .gitignore            # Git ignore rules
+├── backend/           # Django REST Framework Backend
+│   ├── apps/         # Django applications
+│   ├── config/        # Project settings
+│   ├── utils/         # Utility modules
+│   └── manage.py      # Django management
+├── frontend/          # React + Vite Frontend
+│   ├── src/           # React source code
+│   └── package.json   # Frontend dependencies
+└── README.md          # This file
 ```
 
-## Features
+## Quick Start
 
-- **Environment-based Configuration**: Separate settings for different environments
-- **PostgreSQL Database**: Production-ready database configuration
-- **Django REST Framework**: Full REST API support
-- **Custom User Model**: Extended user model with additional fields
-- **CORS Support**: Configured for frontend integration
-- **Admin Panel**: Django admin interface for all models
-- **Scalable Architecture**: Modular app structure for easy expansion
-
-## Prerequisites
-
-- Python 3.9+
-- PostgreSQL 12+
-- pip (Python package manager)
-
-## Setup Instructions
-
-### 1. Clone the Repository
+### Backend Setup
 
 ```bash
-git clone <repository-url>
-cd Dog_AI
-```
-
-### 2. Create Virtual Environment
-
-```bash
+cd backend
 python -m venv venv
-
-# On Windows
-venv\Scripts\activate
-
-# On macOS/Linux
-source venv/bin/activate
-```
-
-### 3. Install Dependencies
-
-```bash
+venv\Scripts\Activate.ps1  # Windows
 pip install -r requirements.txt
-```
-
-### 4. Setup PostgreSQL Database
-
-Create a PostgreSQL database:
-
-```sql
-CREATE DATABASE pet_health_db;
-CREATE USER postgres WITH PASSWORD 'your-password';
-GRANT ALL PRIVILEGES ON DATABASE pet_health_db TO postgres;
-```
-
-### 5. Configure Environment Variables
-
-Copy the example environment file:
-
-```bash
-# On Windows
-copy env.example .env
-
-# On macOS/Linux
-cp env.example .env
-```
-
-Edit `.env` file with your configuration:
-
-```env
-SECRET_KEY=your-secret-key-here
-DEBUG=True
-ALLOWED_HOSTS=localhost,127.0.0.1
-
-DB_NAME=pet_health_db
-DB_USER=postgres
-DB_PASSWORD=your-db-password
-DB_HOST=localhost
-DB_PORT=5432
-
-TIME_ZONE=UTC
-CORS_ALLOWED_ORIGINS=http://localhost:3000,http://127.0.0.1:3000
-```
-
-### 6. Run Migrations
-
-```bash
-python manage.py makemigrations
 python manage.py migrate
-```
-
-### 7. Create Superuser
-
-```bash
-python manage.py createsuperuser
-```
-
-### 8. Run Development Server
-
-```bash
 python manage.py runserver
 ```
 
-The server will be available at `http://127.0.0.1:8000/`
+Backend runs at: `http://127.0.0.1:8000/`
 
-## API Endpoints
+### Frontend Setup
 
-- Admin Panel: `http://127.0.0.1:8000/admin/`
-- API Auth: `http://127.0.0.1:8000/api/auth/`
-- API Pets: `http://127.0.0.1:8000/api/pets/`
-- API Health: `http://127.0.0.1:8000/api/health/`
-- API Appointments: `http://127.0.0.1:8000/api/appointments/`
-- API Notifications: `http://127.0.0.1:8000/api/notifications/`
+```bash
+cd frontend
+npm install
+npm run dev
+```
 
-## API Testing Guide
+Frontend runs at: `http://localhost:5173/`
 
-For detailed Postman testing instructions, request/response examples, and step-by-step testing guide, see **[API_TESTING_GUIDE.md](./API_TESTING_GUIDE.md)**
+## Documentation
 
-The guide includes:
-- Complete API endpoint documentation
-- Request/Response examples
-- Postman collection setup
-- Authentication flow
-- Error handling examples
-- Testing scenarios
+- [API Endpoints](./API_ENDPOINTS.md) - Complete API documentation
+- [API Response Standard](./API_RESPONSE_STANDARD.md) - Response format guide
+- [Phase-1 Audit Report](./PHASE1_AUDIT_REPORT.md) - Production readiness audit
+- [Backend README](./backend/README.md) - Backend setup details
+- [Frontend README](./frontend/README.md) - Frontend setup details
 
-## Applications Overview
+## Features
 
-### Accounts App
-- Custom User model with extended fields
-- User authentication and authorization
-- Profile management
+### Phase-1 (Completed) ✅
 
-### Pets App
-- Pet registration and management
-- Pet profiles with photos
-- Breed and type tracking
+- ✅ User Authentication (JWT)
+- ✅ User Profile Management
+- ✅ Pet Management (CRUD)
+- ✅ Health Records & Vaccinations
+- ✅ Appointment Scheduling
+- ✅ Subscription Plans
+- ✅ Notifications
+- ✅ Admin Panel
+- ✅ Security & Permissions
+- ✅ Standardized API Responses
 
-### Health App
-- Health records management
-- Vaccination tracking
-- Medication records
-- Health history
+## Tech Stack
 
-### Appointments App
-- Appointment scheduling
-- Veterinarian assignment
-- Appointment status tracking
+### Backend
+- Python 3.12+
+- Django 4.2+
+- Django REST Framework
+- PostgreSQL
+- JWT Authentication
 
-### Notifications App
-- User notifications
-- Notification types (appointments, vaccinations, etc.)
-- Read/unread status
+### Frontend
+- React 18+
+- Vite
+- React Router DOM
+- Axios
+- Context API
 
 ## Development
 
-### Running Tests
+### Backend Commands
 
 ```bash
-python manage.py test
+cd backend
+python manage.py runserver          # Run development server
+python manage.py makemigrations     # Create migrations
+python manage.py migrate            # Apply migrations
+python manage.py createsuperuser    # Create admin user
+python manage.py check              # Check for issues
 ```
 
-### Collecting Static Files
+### Frontend Commands
 
 ```bash
-python manage.py collectstatic
+cd frontend
+npm run dev      # Development server
+npm run build    # Production build
+npm run preview  # Preview production build
 ```
 
-### Creating New Migrations
+## Environment Variables
 
-```bash
-python manage.py makemigrations <app_name>
-python manage.py migrate
+### Backend (.env in backend/)
+
+```env
+SECRET_KEY=your-secret-key
+DEBUG=True
+DB_NAME=pet_health_db
+DB_USER=postgres
+DB_PASSWORD=your-password
+DB_HOST=localhost
+DB_PORT=5432
 ```
 
-## Production Deployment
+### Frontend (.env in frontend/)
 
-For production deployment:
+```env
+VITE_API_BASE_URL=http://127.0.0.1:8000/api
+```
 
-1. Set `DEBUG=False` in production settings
-2. Configure proper `ALLOWED_HOSTS`
-3. Use a production-ready database
-4. Set up proper static file serving
-5. Configure SSL/HTTPS
-6. Set up proper logging
-7. Use environment variables for sensitive data
+## API Base URL
+
+Default: `http://127.0.0.1:8000/api`
+
+## Admin Panel
+
+URL: `http://127.0.0.1:8000/admin/`
 
 ## License
 
-Venturing Digitally Pvt Ltd.
+Private Project
 
-## Author
+## Contact
 
-Vishnu Kumar Ghosh
+For questions or issues, please contact the development team.
