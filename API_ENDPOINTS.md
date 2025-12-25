@@ -22,9 +22,9 @@ POST   /api/auth/register/
     "email": "user@example.com",
     "password": "SecurePass123!",
     "password_confirm": "SecurePass123!",
-    "first_name": "John",
-    "last_name": "Doe",
-    "phone_number": "+1234567890",
+    "first_name": "Vishnu",
+    "last_name": "Ghosh",
+    "phone_number": "7292992274",
     "role": "USER"
 }
 ```
@@ -120,9 +120,9 @@ PATCH  /api/auth/users/me/
 **Request Body (PATCH example):**
 ```json
 {
-    "first_name": "Jane",
-    "last_name": "Smith",
-    "phone_number": "+9876543210",
+    "first_name": "Vishnu",
+    "last_name": "Kumar Ghosh",
+    "phone_number": "9876543210",
     "is_veterinarian": true
 }
 ```
@@ -139,7 +139,7 @@ POST   /api/auth/users/change-password/
 **Request Body:**
 ```json
 {
-    "old_password": "OldPass123!",
+    "old_password": "SecurePass123!",
     "new_password": "NewPass456!",
     "new_password_confirm": "NewPass456!"
 }
@@ -178,9 +178,9 @@ PATCH  /api/auth/users/{id}/
 **Request Body:**
 ```json
 {
-    "first_name": "Updated",
-    "last_name": "Name",
-    "phone_number": "+1111111111",
+    "first_name": "Vishnu",
+    "last_name": "Ghosh",
+    "phone_number": "7061468001",
     "is_veterinarian": false
 }
 ```
@@ -220,8 +220,8 @@ PATCH  /api/auth/profiles/me/
 **Request Body:**
 ```json
 {
-    "phone": "+1234567890",
-    "location": "New York, USA",
+    "phone": "9656965685",
+    "location": "Noida",
     "is_active": true
 }
 ```
@@ -731,11 +731,11 @@ Most endpoints require JWT authentication. Include the token in the Authorizatio
 Authorization: Bearer <access_token>
 ```
 
-### ⚠️ Important Notes:
+###  Important Notes:
 
-1. **GET Requests:** Body में data नहीं भेजते! Authentication Header में होता है
-2. **POST/PUT/PATCH:** Body में data भेजते हैं + Header में token
-3. **Token Format:** `Bearer <space><token>` (space जरूरी है!)
+1. **GET Requests:** Body meain data nahi bhejte hai  Authentication Header mein  hota hai
+2. **POST/PUT/PATCH:** Body meain data bhejte hai + Header meain token
+3. **Token Format:** `Bearer <space><token>` (space mandatory hai )
 
 ### Postman Setup:
 
