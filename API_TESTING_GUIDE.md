@@ -5,9 +5,16 @@ Complete guide for testing all Pet Health Backend APIs using Postman.
 ## Table of Contents
 1. [Setup](#setup)
 2. [Authentication Flow](#authentication-flow)
-3. [API Endpoints](#api-endpoints)
-4. [Postman Collection Setup](#postman-collection-setup)
-5. [Testing Examples](#testing-examples)
+3. [User Management APIs](#user-management-apis)
+4. [User Profile Endpoints](#user-profile-endpoints)
+5. [Pet Management APIs](#pet-management-apis)
+6. [Health Management APIs](#health-management-apis)
+7. [Subscription Management APIs](#subscription-management-apis)
+8. [Postman Collection Setup](#postman-collection-setup)
+9. [Testing Examples](#testing-examples)
+10. [Error Responses](#error-responses)
+11. [Common Testing Scenarios](#common-testing-scenarios)
+12. [Quick Reference](#quick-reference)
 
 ---
 
@@ -45,7 +52,7 @@ Content-Type: application/json
     "password": "abc@1234",
     "password_confirm": "abc@1234",
     "first_name": "Satyam",
-    "last_name": "Doe",
+    "last_name": "Mishra",
     "phone_number": "7292992274",
     "role": "USER"
 }
@@ -58,10 +65,10 @@ Content-Type: application/json
     "user": {
         "id": 1,
         "email": "user@example.com",
-        "first_name": "John",
-        "last_name": "Doe",
-        "full_name": "John Doe",
-        "phone_number": "+1234567890",
+        "first_name": "Satyam",
+        "last_name": "Mishra",
+        "full_name": "Satyam Mishra",
+        "phone_number": "7292992274",
         "profile_picture": null,
         "role": "USER",
         "is_veterinarian": false,
@@ -106,10 +113,10 @@ Content-Type: application/json
     "user": {
         "id": 1,
         "email": "user@example.com",
-        "first_name": "John",
-        "last_name": "Doe",
-        "full_name": "John Doe",
-        "phone_number": "+1234567890",
+        "first_name": "Satyam",
+        "last_name": "Mishra",
+        "full_name": "Satyam Mishra",
+        "phone_number": "729292274",
         "role": "USER",
         "is_veterinarian": false,
         "is_active": true,
@@ -152,10 +159,10 @@ Content-Type: application/json
     "user": {
         "id": 1,
         "email": "user@example.com",
-        "first_name": "John",
-        "last_name": "Doe",
-        "full_name": "John Doe",
-        "phone_number": "+1234567890",
+        "first_name": "Satyam",
+        "last_name": "Mishra",
+        "full_name": "Satyam Mishra",
+        "phone_number": "7292992274",
         "role": "USER",
         "is_veterinarian": false,
         "is_active": true,
@@ -241,10 +248,10 @@ Content-Type: application/json
 {
     "id": 1,
     "email": "user@example.com",
-    "first_name": "John",
-    "last_name": "Doe",
-    "full_name": "John Doe",
-    "phone_number": "+1234567890",
+    "first_name": "Satyam",
+    "last_name": "Mishra",
+    "full_name": "Satyam Mishra",
+    "phone_number": "7292992274",
     "profile_picture": null,
     "role": "USER",
     "is_veterinarian": false,
@@ -271,9 +278,9 @@ Content-Type: application/json
 **Request Body (PUT - Full Update):**
 ```json
 {
-    "first_name": "Jane",
-    "last_name": "Smith",
-    "phone_number": "+9876543210",
+    "first_name": "Satyam",
+    "last_name": "Mishra",
+    "phone_number": "9876543210",
     "is_veterinarian": true
 }
 ```
@@ -281,7 +288,7 @@ Content-Type: application/json
 **Request Body (PATCH - Partial Update):**
 ```json
 {
-    "first_name": "Jane"
+    "first_name": "Satyam Kumar"
 }
 ```
 
@@ -292,9 +299,9 @@ Content-Type: application/json
     "user": {
         "id": 1,
         "email": "user@example.com",
-        "first_name": "Jane",
-        "last_name": "Smith",
-        "full_name": "Jane Smith",
+        "first_name": "Satyam Kumar",
+        "last_name": "Mishra",
+        "full_name": "Satyam Kumar Mishra",
         "phone_number": "+9876543210",
         "role": "USER",
         "is_veterinarian": true,
@@ -408,10 +415,10 @@ Content-Type: application/json
 {
     "id": 1,
     "email": "user@example.com",
-    "first_name": "John",
-    "last_name": "Doe",
-    "full_name": "John Doe",
-    "phone_number": "+1234567890",
+    "first_name": "Satyam Kumar",
+    "last_name": "Mishra",
+    "full_name": "Satyam Kumar Mishra",
+    "phone_number": "+9876543210",
     "profile_picture": null,
     "role": "USER",
     "is_veterinarian": false,
@@ -438,9 +445,9 @@ Content-Type: application/json
 **Request Body:**
 ```json
 {
-    "first_name": "Updated",
-    "last_name": "Name",
-    "phone_number": "+1111111111",
+    "first_name": "Vishn",
+    "last_name": "Ghosh",
+    "phone_number": "+9876543210",
     "is_veterinarian": false
 }
 ```
@@ -450,10 +457,10 @@ Content-Type: application/json
 {
     "id": 1,
     "email": "user@example.com",
-    "first_name": "Updated",
-    "last_name": "Name",
-    "full_name": "Updated Name",
-    "phone_number": "+1111111111",
+    "first_name": "Vishnu",
+    "last_name": "Ghosh",
+    "full_name": "Vishnu Ghosh",
+    "phone_number": "+9876543210",
     "role": "USER",
     "is_veterinarian": false,
     "is_active": true,
@@ -484,6 +491,1442 @@ Content-Type: application/json
 ```
 
 **Note:** This deactivates the user (sets `is_active=False`) instead of deleting from database.
+
+---
+
+## User Profile Endpoints
+
+### 13. Get Current User Profile
+
+**Endpoint:** `GET /api/auth/profiles/me/`
+
+**Headers:**
+```
+Authorization: Bearer <access_token>
+Content-Type: application/json
+```
+
+**Response (200 OK):**
+```json
+{
+    "success": true,
+    "message": "Profile retrieved successfully.",
+    "data": {
+        "id": 1,
+        "user": 1,
+        "user_email": "user@example.com",
+        "user_full_name": "Satyam Mishra",
+        "phone": "7292992274",
+        "location": "Noida",
+        "is_active": true,
+        "created_at": "2024-01-15T10:30:00Z",
+        "updated_at": "2024-01-15T10:30:00Z"
+    }
+}
+```
+
+---
+
+### 14. Update Current User Profile
+
+**Endpoint:** `PUT /api/auth/profiles/me/` or `PATCH /api/auth/profiles/me/`
+
+**Headers:**
+```
+Authorization: Bearer <access_token>
+Content-Type: application/json
+```
+
+**Request Body (PATCH example):**
+```json
+{
+    "phone": "9876543210",
+    "location": "Delhi",
+    "is_active": true
+}
+```
+
+**Response (200 OK):**
+```json
+{
+    "success": true,
+    "message": "Profile updated successfully.",
+    "data": {
+        "id": 1,
+        "user": 1,
+        "user_email": "user@example.com",
+        "user_full_name": "Satyam Mishra",
+        "phone": "9876543210",
+        "location": "Delhi",
+        "is_active": true,
+        "created_at": "2024-01-15T10:30:00Z",
+        "updated_at": "2024-01-15T11:00:00Z"
+    }
+}
+```
+
+---
+
+### 15. Get User Profile by User ID (Admin Only)
+
+**Endpoint:** `GET /api/auth/profiles/{user_id}/`
+
+**Headers:**
+```
+Authorization: Bearer <admin_access_token>
+Content-Type: application/json
+```
+
+**Response (200 OK):**
+```json
+{
+    "success": true,
+    "message": "Profile retrieved successfully.",
+    "data": {
+        "id": 1,
+        "user": 1,
+        "user_email": "user@example.com",
+        "user_full_name": "Satyam Mishra",
+        "phone": "7292992274",
+        "location": "Noida",
+        "is_active": true,
+        "created_at": "2024-01-15T10:30:00Z",
+        "updated_at": "2024-01-15T10:30:00Z"
+    }
+}
+```
+
+---
+
+### 16. Update User Profile by User ID (Admin Only)
+
+**Endpoint:** `PUT /api/auth/profiles/{user_id}/`
+
+**Headers:**
+```
+Authorization: Bearer <admin_access_token>
+Content-Type: application/json
+```
+
+**Request Body:**
+```json
+{
+    "phone": "7292992274",
+    "location": "Noida",
+    "is_active": true
+}
+```
+
+**Response (200 OK):**
+```json
+{
+    "success": true,
+    "message": "Profile updated successfully.",
+    "data": {
+        "id": 1,
+        "user": 1,
+        "user_email": "user@example.com",
+        "user_full_name": "Satyam Mishra",
+        "phone": "7292992274",
+        "location": "Noida",
+        "is_active": true,
+        "created_at": "2024-01-15T10:30:00Z",
+        "updated_at": "2024-01-15T11:00:00Z"
+    }
+}
+```
+
+---
+
+## Pet Management APIs
+
+### 17. List All Pets
+
+**Endpoint:** `GET /api/pets/pets/`
+
+**Headers:**
+```
+Authorization: Bearer <access_token>
+Content-Type: application/json
+```
+
+**Query Parameters:**
+- `pet_type` - Filter by pet type (dog, cat, bird, rabbit, other)
+- `gender` - Filter by gender (male, female, unknown)
+- `search` - Search by name, breed, or microchip number
+- `ordering` - Order by field (name, created_at, age, etc.)
+
+**Response (200 OK):**
+```json
+{
+    "success": true,
+    "message": "Pets retrieved successfully.",
+    "data": {
+        "count": 5,
+        "next": null,
+        "previous": null,
+        "results": [
+            {
+                "id": 1,
+                "name": "Buddy",
+                "breed": "Golden Retriever",
+                "age": 3,
+                "weight": 25.5,
+                "gender": "male",
+                "pet_type": "dog",
+                "owner": 1,
+                "owner_name": "Satyam Mishra",
+                "created_at": "2024-01-15T10:30:00Z"
+            }
+        ]
+    }
+}
+```
+
+---
+
+### 18. Get Pet by ID
+
+**Endpoint:** `GET /api/pets/pets/{id}/`
+
+**Headers:**
+```
+Authorization: Bearer <access_token>
+Content-Type: application/json
+```
+
+**Response (200 OK):**
+```json
+{
+    "success": true,
+    "message": "Pet retrieved successfully.",
+    "data": {
+        "id": 1,
+        "name": "Buddy",
+        "breed": "Golden Retriever",
+        "age": 3,
+        "weight": 25.5,
+        "gender": "male",
+        "pet_type": "dog",
+        "date_of_birth": "2021-01-15",
+        "color": "Golden",
+        "microchip_number": "ABC123456",
+        "notes": "Friendly and active",
+        "owner": 1,
+        "owner_name": "Satyam Mishra",
+        "owner_email": "user@example.com",
+        "created_at": "2024-01-15T10:30:00Z",
+        "updated_at": "2024-01-15T10:30:00Z"
+    }
+}
+```
+
+---
+
+### 19. Create Pet
+
+**Endpoint:** `POST /api/pets/pets/`
+
+**Headers:**
+```
+Authorization: Bearer <access_token>
+Content-Type: application/json
+```
+
+**Request Body:**
+```json
+{
+    "name": "Buddy",
+    "breed": "Golden Retriever",
+    "age": 3,
+    "weight": 25.5,
+    "gender": "male",
+    "pet_type": "dog",
+    "date_of_birth": "2021-01-15",
+    "color": "Golden",
+    "microchip_number": "ABC123456",
+    "notes": "Friendly and active"
+}
+```
+
+**Response (201 Created):**
+```json
+{
+    "success": true,
+    "message": "Pet created successfully.",
+    "data": {
+        "id": 1,
+        "name": "Buddy",
+        "breed": "Golden Retriever",
+        "age": 3,
+        "weight": 25.5,
+        "gender": "male",
+        "pet_type": "dog",
+        "date_of_birth": "2021-01-15",
+        "color": "Golden",
+        "microchip_number": "ABC123456",
+        "notes": "Friendly and active",
+        "owner": 1,
+        "created_at": "2024-01-15T10:30:00Z",
+        "updated_at": "2024-01-15T10:30:00Z"
+    }
+}
+```
+
+---
+
+### 20. Update Pet
+
+**Endpoint:** `PUT /api/pets/pets/{id}/` or `PATCH /api/pets/pets/{id}/`
+
+**Headers:**
+```
+Authorization: Bearer <access_token>
+Content-Type: application/json
+```
+
+**Request Body (PATCH example):**
+```json
+{
+    "name": "Buddy Updated",
+    "age": 4,
+    "weight": 28.0
+}
+```
+
+**Response (200 OK):**
+```json
+{
+    "success": true,
+    "message": "Pet updated successfully.",
+    "data": {
+        "id": 1,
+        "name": "Buddy Updated",
+        "breed": "Golden Retriever",
+        "age": 4,
+        "weight": 28.0,
+        "gender": "male",
+        "pet_type": "dog",
+        "owner": 1,
+        "updated_at": "2024-01-15T11:00:00Z"
+    }
+}
+```
+
+---
+
+### 21. Delete Pet (Soft Delete)
+
+**Endpoint:** `DELETE /api/pets/pets/{id}/`
+
+**Headers:**
+```
+Authorization: Bearer <access_token>
+Content-Type: application/json
+```
+
+**Response (200 OK):**
+```json
+{
+    "success": true,
+    "message": "Pet deleted successfully."
+}
+```
+
+**Note:** This performs a soft delete (sets `is_deleted=True`), the pet is not removed from the database.
+
+---
+
+### 22. Get My Pets
+
+**Endpoint:** `GET /api/pets/pets/my_pets/`
+
+**Headers:**
+```
+Authorization: Bearer <access_token>
+Content-Type: application/json
+```
+
+**Response (200 OK):**
+```json
+{
+    "success": true,
+    "message": "Pets retrieved successfully.",
+    "data": [
+        {
+            "id": 1,
+            "name": "Buddy",
+            "breed": "Golden Retriever",
+            "age": 3,
+            "weight": 25.5,
+            "gender": "male",
+            "pet_type": "dog",
+            "owner": 1,
+            "created_at": "2024-01-15T10:30:00Z"
+        }
+    ]
+}
+```
+
+---
+
+### 23. Restore Pet
+
+**Endpoint:** `POST /api/pets/pets/{id}/restore/`
+
+**Headers:**
+```
+Authorization: Bearer <access_token>
+Content-Type: application/json
+```
+
+**Response (200 OK):**
+```json
+{
+    "success": true,
+    "message": "Pet restored successfully.",
+    "data": {
+        "id": 1,
+        "name": "Buddy",
+        "breed": "Golden Retriever",
+        "is_deleted": false,
+        "deleted_at": null
+    }
+}
+```
+
+---
+
+## Health Management APIs
+
+### Vaccination Endpoints
+
+### 24. List All Vaccinations
+
+**Endpoint:** `GET /api/health/vaccinations/`
+
+**Headers:**
+```
+Authorization: Bearer <access_token>
+Content-Type: application/json
+```
+
+**Response (200 OK):**
+```json
+{
+    "success": true,
+    "message": "Vaccinations retrieved successfully.",
+    "data": {
+        "count": 10,
+        "next": null,
+        "previous": null,
+        "results": [
+            {
+                "id": 1,
+                "pet": 1,
+                "pet_name": "Buddy",
+                "vaccine_name": "Rabies",
+                "due_date": "2025-01-15",
+                "status": "pending",
+                "administered_date": null,
+                "veterinarian": null,
+                "batch_number": "BATCH123",
+                "notes": "Annual vaccination",
+                "created_at": "2024-01-15T10:30:00Z"
+            }
+        ]
+    }
+}
+```
+
+---
+
+### 25. Get Vaccination Details
+
+**Endpoint:** `GET /api/health/vaccinations/{id}/`
+
+**Headers:**
+```
+Authorization: Bearer <access_token>
+Content-Type: application/json
+```
+
+**Response (200 OK):**
+```json
+{
+    "success": true,
+    "message": "Vaccination retrieved successfully.",
+    "data": {
+        "id": 1,
+        "pet": 1,
+        "pet_name": "Buddy",
+        "pet_breed": "Golden Retriever",
+        "pet_owner": "Satyam Mishra",
+        "vaccine_name": "Rabies",
+        "due_date": "2025-01-15",
+        "status": "pending",
+        "administered_date": null,
+        "veterinarian": null,
+        "veterinarian_name": null,
+        "batch_number": "BATCH123",
+        "notes": "Annual vaccination",
+        "created_at": "2024-01-15T10:30:00Z",
+        "updated_at": "2024-01-15T10:30:00Z"
+    }
+}
+```
+
+---
+
+### 26. Create Vaccination
+
+**Endpoint:** `POST /api/health/vaccinations/`
+
+**Headers:**
+```
+Authorization: Bearer <access_token>
+Content-Type: application/json
+```
+
+**Request Body:**
+```json
+{
+    "pet": 1,
+    "vaccine_name": "Rabies",
+    "due_date": "2025-01-15",
+    "status": "pending",
+    "administered_date": null,
+    "veterinarian": null,
+    "batch_number": "BATCH123",
+    "notes": "Annual vaccination"
+}
+```
+
+**Response (201 Created):**
+```json
+{
+    "success": true,
+    "message": "Vaccination created successfully.",
+    "data": {
+        "id": 1,
+        "pet": 1,
+        "vaccine_name": "Rabies",
+        "due_date": "2025-01-15",
+        "status": "pending",
+        "administered_date": null,
+        "veterinarian": null,
+        "batch_number": "BATCH123",
+        "notes": "Annual vaccination",
+        "created_at": "2024-01-15T10:30:00Z"
+    }
+}
+```
+
+---
+
+### 27. Update Vaccination
+
+**Endpoint:** `PUT /api/health/vaccinations/{id}/` or `PATCH /api/health/vaccinations/{id}/`
+
+**Headers:**
+```
+Authorization: Bearer <access_token>
+Content-Type: application/json
+```
+
+**Request Body (PATCH example):**
+```json
+{
+    "status": "completed",
+    "administered_date": "2025-01-10",
+    "notes": "Vaccination completed successfully"
+}
+```
+
+**Response (200 OK):**
+```json
+{
+    "success": true,
+    "message": "Vaccination updated successfully.",
+    "data": {
+        "id": 1,
+        "status": "completed",
+        "administered_date": "2025-01-10",
+        "notes": "Vaccination completed successfully",
+        "updated_at": "2024-01-15T11:00:00Z"
+    }
+}
+```
+
+---
+
+### 28. Delete Vaccination
+
+**Endpoint:** `DELETE /api/health/vaccinations/{id}/`
+
+**Headers:**
+```
+Authorization: Bearer <access_token>
+Content-Type: application/json
+```
+
+**Response (200 OK):**
+```json
+{
+    "success": true,
+    "message": "Vaccination deleted successfully."
+}
+```
+
+---
+
+### 29. Get My Pets Vaccinations
+
+**Endpoint:** `GET /api/health/vaccinations/my_pets_vaccinations/`
+
+**Headers:**
+```
+Authorization: Bearer <access_token>
+Content-Type: application/json
+```
+
+**Response (200 OK):**
+```json
+{
+    "success": true,
+    "message": "Vaccinations retrieved successfully.",
+    "data": [
+        {
+            "id": 1,
+            "pet": 1,
+            "pet_name": "Buddy",
+            "vaccine_name": "Rabies",
+            "due_date": "2025-01-15",
+            "status": "pending"
+        }
+    ]
+}
+```
+
+---
+
+### 30. Get Pending Vaccinations
+
+**Endpoint:** `GET /api/health/vaccinations/pending/`
+
+**Headers:**
+```
+Authorization: Bearer <access_token>
+Content-Type: application/json
+```
+
+**Response (200 OK):**
+```json
+{
+    "success": true,
+    "message": "Pending vaccinations retrieved successfully.",
+    "data": [
+        {
+            "id": 1,
+            "pet": 1,
+            "pet_name": "Buddy",
+            "vaccine_name": "Rabies",
+            "due_date": "2025-01-15",
+            "status": "pending"
+        }
+    ]
+}
+```
+
+---
+
+### 31. Get Overdue Vaccinations
+
+**Endpoint:** `GET /api/health/vaccinations/overdue/`
+
+**Headers:**
+```
+Authorization: Bearer <access_token>
+Content-Type: application/json
+```
+
+**Response (200 OK):**
+```json
+{
+    "success": true,
+    "message": "Overdue vaccinations retrieved successfully.",
+    "data": [
+        {
+            "id": 1,
+            "pet": 1,
+            "pet_name": "Buddy",
+            "vaccine_name": "Rabies",
+            "due_date": "2024-12-15",
+            "status": "pending"
+        }
+    ]
+}
+```
+
+---
+
+### Health Record Endpoints
+
+### 32. List All Health Records
+
+**Endpoint:** `GET /api/health/health-records/`
+
+**Headers:**
+```
+Authorization: Bearer <access_token>
+Content-Type: application/json
+```
+
+**Response (200 OK):**
+```json
+{
+    "success": true,
+    "message": "Health records retrieved successfully.",
+    "data": {
+        "count": 5,
+        "next": null,
+        "previous": null,
+        "results": [
+            {
+                "id": 1,
+                "pet": 1,
+                "pet_name": "Buddy",
+                "weight": 25.5,
+                "record_date": "2025-01-10",
+                "temperature": 38.5,
+                "heart_rate": 120,
+                "veterinarian": null,
+                "created_at": "2024-01-15T10:30:00Z"
+            }
+        ]
+    }
+}
+```
+
+---
+
+### 33. Get Health Record Details
+
+**Endpoint:** `GET /api/health/health-records/{id}/`
+
+**Headers:**
+```
+Authorization: Bearer <access_token>
+Content-Type: application/json
+```
+
+**Response (200 OK):**
+```json
+{
+    "success": true,
+    "message": "Health record retrieved successfully.",
+    "data": {
+        "id": 1,
+        "pet": 1,
+        "pet_name": "Buddy",
+        "pet_breed": "Golden Retriever",
+        "pet_owner": "Satyam Mishra",
+        "weight": 25.5,
+        "notes": "Regular checkup, all good",
+        "record_date": "2025-01-10",
+        "veterinarian": null,
+        "veterinarian_name": null,
+        "temperature": 38.5,
+        "heart_rate": 120,
+        "created_at": "2024-01-15T10:30:00Z",
+        "updated_at": "2024-01-15T10:30:00Z"
+    }
+}
+```
+
+---
+
+### 34. Create Health Record
+
+**Endpoint:** `POST /api/health/health-records/`
+
+**Headers:**
+```
+Authorization: Bearer <access_token>
+Content-Type: application/json
+```
+
+**Request Body:**
+```json
+{
+    "pet": 1,
+    "weight": 25.5,
+    "notes": "Regular checkup, all good",
+    "record_date": "2025-01-10",
+    "veterinarian": null,
+    "temperature": 38.5,
+    "heart_rate": 120
+}
+```
+
+**Response (201 Created):**
+```json
+{
+    "success": true,
+    "message": "Health record created successfully.",
+    "data": {
+        "id": 1,
+        "pet": 1,
+        "weight": 25.5,
+        "notes": "Regular checkup, all good",
+        "record_date": "2025-01-10",
+        "veterinarian": null,
+        "temperature": 38.5,
+        "heart_rate": 120,
+        "created_at": "2024-01-15T10:30:00Z"
+    }
+}
+```
+
+---
+
+### 35. Update Health Record
+
+**Endpoint:** `PUT /api/health/health-records/{id}/` or `PATCH /api/health/health-records/{id}/`
+
+**Headers:**
+```
+Authorization: Bearer <access_token>
+Content-Type: application/json
+```
+
+**Request Body (PATCH example):**
+```json
+{
+    "weight": 26.0,
+    "notes": "Weight increased, healthy"
+}
+```
+
+**Response (200 OK):**
+```json
+{
+    "success": true,
+    "message": "Health record updated successfully.",
+    "data": {
+        "id": 1,
+        "weight": 26.0,
+        "notes": "Weight increased, healthy",
+        "updated_at": "2024-01-15T11:00:00Z"
+    }
+}
+```
+
+---
+
+### 36. Delete Health Record
+
+**Endpoint:** `DELETE /api/health/health-records/{id}/`
+
+**Headers:**
+```
+Authorization: Bearer <access_token>
+Content-Type: application/json
+```
+
+**Response (200 OK):**
+```json
+{
+    "success": true,
+    "message": "Health record deleted successfully."
+}
+```
+
+---
+
+### 37. Get My Pets Health Records
+
+**Endpoint:** `GET /api/health/health-records/my_pets_records/`
+
+**Headers:**
+```
+Authorization: Bearer <access_token>
+Content-Type: application/json
+```
+
+**Response (200 OK):**
+```json
+{
+    "success": true,
+    "message": "Health records retrieved successfully.",
+    "data": [
+        {
+            "id": 1,
+            "pet": 1,
+            "pet_name": "Buddy",
+            "weight": 25.5,
+            "record_date": "2025-01-10",
+            "temperature": 38.5,
+            "heart_rate": 120
+        }
+    ]
+}
+```
+
+---
+
+### 38. Get Pet Health Records
+
+**Endpoint:** `GET /api/health/health-records/{id}/pet_records/`
+
+**Headers:**
+```
+Authorization: Bearer <access_token>
+Content-Type: application/json
+```
+
+**Response (200 OK):**
+```json
+{
+    "success": true,
+    "message": "Health records retrieved successfully.",
+    "data": [
+        {
+            "id": 1,
+            "pet": 1,
+            "weight": 25.5,
+            "record_date": "2025-01-10",
+            "temperature": 38.5,
+            "heart_rate": 120
+        }
+    ]
+}
+```
+
+---
+
+## Subscription Management APIs
+
+### Subscription Plan Endpoints
+
+### 39. List All Subscription Plans
+
+**Endpoint:** `GET /api/subscriptions/plans/`
+
+**Headers:**
+```
+Authorization: Bearer <access_token>
+Content-Type: application/json
+```
+
+**Response (200 OK):**
+```json
+{
+    "success": true,
+    "message": "Subscription plans retrieved successfully.",
+    "data": {
+        "count": 2,
+        "next": null,
+        "previous": null,
+        "results": [
+            {
+                "id": 1,
+                "plan_type": "free",
+                "name": "Free Plan",
+                "description": "Basic features",
+                "price": 0.00,
+                "duration_days": 30,
+                "is_active": true,
+                "features": ["Basic features"],
+                "max_pets": 2
+            },
+            {
+                "id": 2,
+                "plan_type": "premium",
+                "name": "Premium Plan",
+                "description": "Premium features",
+                "price": 29.99,
+                "duration_days": 30,
+                "is_active": true,
+                "features": ["Unlimited pets", "Priority support"],
+                "max_pets": 10
+            }
+        ]
+    }
+}
+```
+
+---
+
+### 40. Get Subscription Plan Details
+
+**Endpoint:** `GET /api/subscriptions/plans/{id}/`
+
+**Headers:**
+```
+Authorization: Bearer <access_token>
+Content-Type: application/json
+```
+
+**Response (200 OK):**
+```json
+{
+    "success": true,
+    "message": "Subscription plan retrieved successfully.",
+    "data": {
+        "id": 1,
+        "plan_type": "premium",
+        "name": "Premium Plan",
+        "description": "Premium subscription with advanced features",
+        "price": 29.99,
+        "duration_days": 30,
+        "is_active": true,
+        "features": ["Unlimited pets", "Priority support", "Advanced analytics"],
+        "max_pets": 10,
+        "created_at": "2024-01-15T10:30:00Z",
+        "updated_at": "2024-01-15T10:30:00Z"
+    }
+}
+```
+
+---
+
+### 41. Create Subscription Plan (Admin Only)
+
+**Endpoint:** `POST /api/subscriptions/plans/`
+
+**Headers:**
+```
+Authorization: Bearer <admin_access_token>
+Content-Type: application/json
+```
+
+**Request Body:**
+```json
+{
+    "plan_type": "premium",
+    "name": "Premium Plan",
+    "description": "Premium subscription with advanced features",
+    "price": 29.99,
+    "duration_days": 30,
+    "is_active": true,
+    "features": ["Unlimited pets", "Priority support", "Advanced analytics"],
+    "max_pets": 10
+}
+```
+
+**Response (201 Created):**
+```json
+{
+    "success": true,
+    "message": "Subscription plan created successfully.",
+    "data": {
+        "id": 1,
+        "plan_type": "premium",
+        "name": "Premium Plan",
+        "description": "Premium subscription with advanced features",
+        "price": 29.99,
+        "duration_days": 30,
+        "is_active": true,
+        "features": ["Unlimited pets", "Priority support", "Advanced analytics"],
+        "max_pets": 10,
+        "created_at": "2024-01-15T10:30:00Z"
+    }
+}
+```
+
+---
+
+### 42. Update Subscription Plan (Admin Only)
+
+**Endpoint:** `PUT /api/subscriptions/plans/{id}/` or `PATCH /api/subscriptions/plans/{id}/`
+
+**Headers:**
+```
+Authorization: Bearer <admin_access_token>
+Content-Type: application/json
+```
+
+**Request Body (PATCH example):**
+```json
+{
+    "price": 39.99,
+    "features": ["Unlimited pets", "Priority support", "Advanced analytics", "24/7 Support"]
+}
+```
+
+**Response (200 OK):**
+```json
+{
+    "success": true,
+    "message": "Subscription plan updated successfully.",
+    "data": {
+        "id": 1,
+        "price": 39.99,
+        "features": ["Unlimited pets", "Priority support", "Advanced analytics", "24/7 Support"],
+        "updated_at": "2024-01-15T11:00:00Z"
+    }
+}
+```
+
+---
+
+### 43. Delete Subscription Plan (Admin Only)
+
+**Endpoint:** `DELETE /api/subscriptions/plans/{id}/`
+
+**Headers:**
+```
+Authorization: Bearer <admin_access_token>
+Content-Type: application/json
+```
+
+**Response (200 OK):**
+```json
+{
+    "success": true,
+    "message": "Subscription plan deleted successfully."
+}
+```
+
+---
+
+### 44. Get Active Subscription Plans
+
+**Endpoint:** `GET /api/subscriptions/plans/active/`
+
+**Headers:**
+```
+Authorization: Bearer <access_token>
+Content-Type: application/json
+```
+
+**Response (200 OK):**
+```json
+{
+    "success": true,
+    "message": "Active subscription plans retrieved successfully.",
+    "data": [
+        {
+            "id": 1,
+            "plan_type": "free",
+            "name": "Free Plan",
+            "price": 0.00,
+            "is_active": true
+        },
+        {
+            "id": 2,
+            "plan_type": "premium",
+            "name": "Premium Plan",
+            "price": 29.99,
+            "is_active": true
+        }
+    ]
+}
+```
+
+---
+
+### User Subscription Endpoints
+
+### 45. List All User Subscriptions
+
+**Endpoint:** `GET /api/subscriptions/subscriptions/`
+
+**Headers:**
+```
+Authorization: Bearer <access_token>
+Content-Type: application/json
+```
+
+**Response (200 OK):**
+```json
+{
+    "success": true,
+    "message": "User subscriptions retrieved successfully.",
+    "data": {
+        "count": 1,
+        "next": null,
+        "previous": null,
+        "results": [
+            {
+                "id": 1,
+                "user": 1,
+                "user_email": "user@example.com",
+                "plan": 1,
+                "plan_name": "Premium Plan",
+                "start_date": "2025-01-01",
+                "end_date": "2025-01-31",
+                "status": "active",
+                "is_active": true,
+                "auto_renew": false
+            }
+        ]
+    }
+}
+```
+
+---
+
+### 46. Get User Subscription Details
+
+**Endpoint:** `GET /api/subscriptions/subscriptions/{id}/`
+
+**Headers:**
+```
+Authorization: Bearer <access_token>
+Content-Type: application/json
+```
+
+**Response (200 OK):**
+```json
+{
+    "success": true,
+    "message": "User subscription retrieved successfully.",
+    "data": {
+        "id": 1,
+        "user": 1,
+        "user_email": "user@example.com",
+        "user_full_name": "Satyam Mishra",
+        "plan": 1,
+        "plan_name": "Premium Plan",
+        "plan_type": "premium",
+        "start_date": "2025-01-01",
+        "end_date": "2025-01-31",
+        "status": "active",
+        "is_active": true,
+        "auto_renew": false,
+        "cancelled_at": null,
+        "created_at": "2024-01-15T10:30:00Z",
+        "updated_at": "2024-01-15T10:30:00Z"
+    }
+}
+```
+
+---
+
+### 47. Create User Subscription (Admin Only)
+
+**Endpoint:** `POST /api/subscriptions/subscriptions/`
+
+**Headers:**
+```
+Authorization: Bearer <admin_access_token>
+Content-Type: application/json
+```
+
+**Request Body:**
+```json
+{
+    "user": 1,
+    "plan": 1,
+    "start_date": "2025-01-01",
+    "end_date": "2025-01-31",
+    "status": "active",
+    "auto_renew": false
+}
+```
+
+**Response (201 Created):**
+```json
+{
+    "success": true,
+    "message": "User subscription created successfully.",
+    "data": {
+        "id": 1,
+        "user": 1,
+        "plan": 1,
+        "start_date": "2025-01-01",
+        "end_date": "2025-01-31",
+        "status": "active",
+        "is_active": true,
+        "auto_renew": false,
+        "created_at": "2024-01-15T10:30:00Z"
+    }
+}
+```
+
+---
+
+### 48. Update User Subscription (Admin Only)
+
+**Endpoint:** `PUT /api/subscriptions/subscriptions/{id}/` or `PATCH /api/subscriptions/subscriptions/{id}/`
+
+**Headers:**
+```
+Authorization: Bearer <admin_access_token>
+Content-Type: application/json
+```
+
+**Request Body (PATCH example):**
+```json
+{
+    "status": "cancelled",
+    "auto_renew": false
+}
+```
+
+**Response (200 OK):**
+```json
+{
+    "success": true,
+    "message": "User subscription updated successfully.",
+    "data": {
+        "id": 1,
+        "status": "cancelled",
+        "is_active": false,
+        "auto_renew": false,
+        "cancelled_at": "2024-01-15T11:00:00Z",
+        "updated_at": "2024-01-15T11:00:00Z"
+    }
+}
+```
+
+---
+
+### 49. Delete User Subscription (Admin Only)
+
+**Endpoint:** `DELETE /api/subscriptions/subscriptions/{id}/`
+
+**Headers:**
+```
+Authorization: Bearer <admin_access_token>
+Content-Type: application/json
+```
+
+**Response (200 OK):**
+```json
+{
+    "success": true,
+    "message": "User subscription deleted successfully."
+}
+```
+
+---
+
+### 50. Get My Active Subscription
+
+**Endpoint:** `GET /api/subscriptions/subscriptions/my_subscription/`
+
+**Headers:**
+```
+Authorization: Bearer <access_token>
+Content-Type: application/json
+```
+
+**Response (200 OK):**
+```json
+{
+    "success": true,
+    "message": "Active subscription retrieved successfully.",
+    "data": {
+        "id": 1,
+        "user": 1,
+        "plan": 1,
+        "plan_name": "Premium Plan",
+        "start_date": "2025-01-01",
+        "end_date": "2025-01-31",
+        "status": "active",
+        "is_active": true
+    }
+}
+```
+
+**Response (404 Not Found) - No Active Subscription:**
+```json
+{
+    "success": false,
+    "message": "No active subscription found.",
+    "errors": {}
+}
+```
+
+---
+
+### 51. Get My Current Subscription
+
+**Endpoint:** `GET /api/subscriptions/subscriptions/current/`
+
+**Headers:**
+```
+Authorization: Bearer <access_token>
+Content-Type: application/json
+```
+
+**Response (200 OK):**
+```json
+{
+    "success": true,
+    "message": "Current subscription retrieved successfully.",
+    "data": {
+        "id": 1,
+        "user": 1,
+        "plan": 1,
+        "plan_name": "Premium Plan",
+        "start_date": "2025-01-01",
+        "end_date": "2025-01-31",
+        "status": "active",
+        "is_active": true
+    }
+}
+```
+
+---
+
+### 52. Get My All Subscriptions
+
+**Endpoint:** `GET /api/subscriptions/subscriptions/my_subscriptions/`
+
+**Headers:**
+```
+Authorization: Bearer <access_token>
+Content-Type: application/json
+```
+
+**Response (200 OK):**
+```json
+{
+    "success": true,
+    "message": "User subscriptions retrieved successfully.",
+    "data": [
+        {
+            "id": 1,
+            "plan": 1,
+            "plan_name": "Premium Plan",
+            "start_date": "2025-01-01",
+            "end_date": "2025-01-31",
+            "status": "active",
+            "is_active": true
+        }
+    ]
+}
+```
+
+---
+
+### 53. Cancel Subscription (Admin Only)
+
+**Endpoint:** `POST /api/subscriptions/subscriptions/{id}/cancel/`
+
+**Headers:**
+```
+Authorization: Bearer <admin_access_token>
+Content-Type: application/json
+```
+
+**Response (200 OK):**
+```json
+{
+    "success": true,
+    "message": "Subscription cancelled successfully.",
+    "data": {
+        "id": 1,
+        "status": "cancelled",
+        "is_active": false,
+        "cancelled_at": "2024-01-15T11:00:00Z"
+    }
+}
+```
 
 ---
 
@@ -654,6 +2097,34 @@ or
 4. Update user (as admin)
 5. Deactivate user (soft delete)
 
+### Scenario 5: Pet Management Flow
+1. Create a new pet
+2. List all my pets
+3. Get pet details
+4. Update pet information
+5. Create vaccination record for pet
+6. Create health record for pet
+7. Soft delete pet
+8. Restore pet
+
+### Scenario 6: Health Management Flow
+1. Create vaccination record
+2. List all vaccinations
+3. Get pending vaccinations
+4. Get overdue vaccinations
+5. Update vaccination status
+6. Create health record
+7. List health records for a pet
+8. Update health record
+
+### Scenario 7: Subscription Management Flow
+1. List all subscription plans
+2. Get active plans
+3. Create user subscription (Admin)
+4. Get my active subscription
+5. Get my all subscriptions
+6. Cancel subscription (Admin)
+
 ---
 
 ## Quick Reference
@@ -676,6 +2147,69 @@ or
 - `PATCH /api/auth/users/me/` - Partial update current user
 - `POST /api/auth/users/change-password/` - Change password
 
+### User Profile Endpoints
+- `GET /api/auth/profiles/me/` - Get current user profile
+- `PUT /api/auth/profiles/me/` - Update current user profile
+- `PATCH /api/auth/profiles/me/` - Partial update current user profile
+- `GET /api/auth/profiles/{user_id}/` - Get user profile by ID (Admin)
+- `PUT /api/auth/profiles/{user_id}/` - Update user profile by ID (Admin)
+
+### Pet Management Endpoints
+- `GET /api/pets/pets/` - List all pets
+- `GET /api/pets/pets/{id}/` - Get pet by ID
+- `POST /api/pets/pets/` - Create pet
+- `PUT /api/pets/pets/{id}/` - Update pet
+- `PATCH /api/pets/pets/{id}/` - Partial update pet
+- `DELETE /api/pets/pets/{id}/` - Soft delete pet
+- `GET /api/pets/pets/my_pets/` - Get my pets
+- `POST /api/pets/pets/{id}/restore/` - Restore soft-deleted pet
+
+### Health Management Endpoints
+
+#### Vaccination Endpoints
+- `GET /api/health/vaccinations/` - List all vaccinations
+- `GET /api/health/vaccinations/{id}/` - Get vaccination details
+- `POST /api/health/vaccinations/` - Create vaccination
+- `PUT /api/health/vaccinations/{id}/` - Update vaccination
+- `PATCH /api/health/vaccinations/{id}/` - Partial update vaccination
+- `DELETE /api/health/vaccinations/{id}/` - Delete vaccination
+- `GET /api/health/vaccinations/my_pets_vaccinations/` - Get my pets vaccinations
+- `GET /api/health/vaccinations/pending/` - Get pending vaccinations
+- `GET /api/health/vaccinations/overdue/` - Get overdue vaccinations
+
+#### Health Record Endpoints
+- `GET /api/health/health-records/` - List all health records
+- `GET /api/health/health-records/{id}/` - Get health record details
+- `POST /api/health/health-records/` - Create health record
+- `PUT /api/health/health-records/{id}/` - Update health record
+- `PATCH /api/health/health-records/{id}/` - Partial update health record
+- `DELETE /api/health/health-records/{id}/` - Delete health record
+- `GET /api/health/health-records/my_pets_records/` - Get my pets health records
+- `GET /api/health/health-records/{id}/pet_records/` - Get pet health records
+
+### Subscription Management Endpoints
+
+#### Subscription Plan Endpoints
+- `GET /api/subscriptions/plans/` - List all subscription plans
+- `GET /api/subscriptions/plans/{id}/` - Get subscription plan details
+- `POST /api/subscriptions/plans/` - Create subscription plan (Admin)
+- `PUT /api/subscriptions/plans/{id}/` - Update subscription plan (Admin)
+- `PATCH /api/subscriptions/plans/{id}/` - Partial update subscription plan (Admin)
+- `DELETE /api/subscriptions/plans/{id}/` - Delete subscription plan (Admin)
+- `GET /api/subscriptions/plans/active/` - Get active subscription plans
+
+#### User Subscription Endpoints
+- `GET /api/subscriptions/subscriptions/` - List all user subscriptions
+- `GET /api/subscriptions/subscriptions/{id}/` - Get user subscription details
+- `POST /api/subscriptions/subscriptions/` - Create user subscription (Admin)
+- `PUT /api/subscriptions/subscriptions/{id}/` - Update user subscription (Admin)
+- `PATCH /api/subscriptions/subscriptions/{id}/` - Partial update user subscription (Admin)
+- `DELETE /api/subscriptions/subscriptions/{id}/` - Delete user subscription (Admin)
+- `GET /api/subscriptions/subscriptions/my_subscription/` - Get my active subscription
+- `GET /api/subscriptions/subscriptions/current/` - Get my current subscription
+- `GET /api/subscriptions/subscriptions/my_subscriptions/` - Get my all subscriptions
+- `POST /api/subscriptions/subscriptions/{id}/cancel/` - Cancel subscription (Admin)
+
 ---
 
 ## Tips for Testing
@@ -687,6 +2221,11 @@ or
 5. **Use Postman Pre-request Scripts** to auto-refresh tokens if expired
 6. **Test pagination** for list endpoints (if applicable)
 7. **Test role-based access** - try admin endpoints as regular user
+8. **Test ownership** - try accessing other users' pets, health records, subscriptions
+9. **Test soft delete** - verify pets can be restored after deletion
+10. **Test date validations** - try past dates for appointments, future dates for vaccinations
+11. **Test query parameters** - use filters, search, and ordering for list endpoints
+12. **Test partial updates** - use PATCH for updating only specific fields
 
 ---
 
@@ -760,5 +2299,5 @@ For issues or questions:
 
 ---
 
-**Last Updated:** 2025-12-24
+**Last Updated:** 2025-12-25
 
